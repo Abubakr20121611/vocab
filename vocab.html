@@ -1,0 +1,1190 @@
+```html
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vocabulary Test</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#eef3f8;
+    color:#172033;
+}
+
+.container{
+    width:94%;
+    max-width:850px;
+    margin:35px auto;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.hidden{display:none!important}
+.center{text-align:center}
+
+.brand{
+    color:#2563eb;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+h1{margin-bottom:10px}
+
+input,textarea{
+    width:100%;
+    padding:14px;
+    border:2px solid #ddd;
+    border-radius:12px;
+    font-size:16px;
+    font-family:Arial,sans-serif;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:14px 22px;
+    margin:6px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.primary{
+    background:#2563eb;
+    color:white;
+}
+
+.secondary{
+    background:#e5e7eb;
+    color:#111;
+}
+
+.begin{
+    font-size:20px;
+    padding:17px 40px;
+}
+
+.lesson-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin:25px 0;
+}
+
+.lesson{
+    border:2px solid #ddd;
+    padding:16px;
+    border-radius:12px;
+    cursor:pointer;
+    background:#fafafa;
+    font-weight:bold;
+    text-align:center;
+}
+
+.lesson.selected{
+    border-color:#2563eb;
+    background:#eef4ff;
+    color:#2563eb;
+}
+
+.progress{
+    text-align:center;
+    font-weight:bold;
+    color:#555;
+}
+
+.word{
+    font-size:38px;
+    font-weight:bold;
+    text-align:center;
+    margin:30px 0;
+}
+
+.label{
+    font-weight:bold;
+    margin:20px 0 8px;
+}
+
+.feedback{
+    margin-top:20px;
+    padding:18px;
+    border-radius:14px;
+    background:#f5f7fa;
+}
+
+.good{
+    border-left:6px solid #16a34a;
+    background:#ecfdf5;
+}
+
+.bad{
+    border-left:6px solid #dc2626;
+    background:#fef2f2;
+}
+
+.warning{
+    border-left:6px solid #f59e0b;
+    background:#fffbeb;
+}
+
+.error{
+    color:#dc2626;
+    font-weight:bold;
+}
+
+.info{
+    background:#eef4ff;
+    padding:14px;
+    border-radius:12px;
+    margin:15px 0;
+}
+
+.score{
+    font-size:32px;
+    font-weight:bold;
+    text-align:center;
+    margin:25px;
+}
+
+.small{
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+    .card{padding:20px}
+    .lesson-grid{grid-template-columns:1fr}
+    button{width:100%;margin:6px 0}
+    .word{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginPage" class="card center">
+
+    <div class="brand">👤 Abubakr Rabbimov</div>
+
+    <h1>📚 Vocabulary Test</h1>
+
+    <p>Davom etish uchun parolni kiriting.</p>
+
+    <input
+        id="passwordInput"
+        type="password"
+        placeholder="Password"
+        onkeydown="if(event.key==='Enter') login()"
+    >
+
+    <br><br>
+
+    <button class="primary" onclick="login()">
+        ENTER
+    </button>
+
+    <p id="passwordError" class="error"></p>
+
+</div>
+
+
+<!-- LESSON SELECT -->
+
+<div id="lessonPage" class="card hidden">
+
+    <div class="brand center">
+        👤 Abubakr Rabbimov
+    </div>
+
+    <h1 class="center">Lesson tanlang</h1>
+
+    <p class="center">
+        Bir yoki bir nechta lesson tanlang.
+    </p>
+
+    <div class="lesson-grid">
+
+        <div class="lesson" id="lesson11" onclick="toggleLesson(11)">Lesson 11</div>
+        <div class="lesson" id="lesson12" onclick="toggleLesson(12)">Lesson 12</div>
+        <div class="lesson" id="lesson13" onclick="toggleLesson(13)">Lesson 13</div>
+        <div class="lesson" id="lesson14" onclick="toggleLesson(14)">Lesson 14</div>
+        <div class="lesson" id="lesson15" onclick="toggleLesson(15)">Lesson 15</div>
+        <div class="lesson" id="lesson16" onclick="toggleLesson(16)">Lesson 16</div>
+        <div class="lesson" id="lesson17" onclick="toggleLesson(17)">Lesson 17</div>
+        <div class="lesson" id="lesson18" onclick="toggleLesson(18)">Lesson 18</div>
+        <div class="lesson" id="lesson19" onclick="toggleLesson(19)">Lesson 19</div>
+        <div class="lesson" id="lesson20" onclick="toggleLesson(20)">Lesson 20</div>
+
+    </div>
+
+    <div id="selectedInfo" class="info center">
+        Hech qanday lesson tanlanmagan.
+    </div>
+
+    <div class="center">
+        <button class="primary begin" onclick="beginTest()">
+            BEGIN TEST
+        </button>
+    </div>
+
+</div>
+
+
+<!-- TEST -->
+
+<div id="testPage" class="card hidden">
+
+    <div class="brand center">👤 Abubakr Rabbimov</div>
+
+    <div id="progress" class="progress">
+        Question 1 / 15
+    </div>
+
+    <div id="word" class="word"></div>
+
+    <div class="label">
+        1. O‘zbekcha tarjimasini yozing:
+    </div>
+
+    <input
+        id="translationInput"
+        type="text"
+        placeholder="Tarjimasini yozing..."
+    >
+
+    <div class="label">
+        2. Shu vocabulary bilan inglizcha gap tuzing:
+    </div>
+
+    <textarea
+        id="sentenceInput"
+        placeholder="Write your sentence here..."
+    ></textarea>
+
+    <div class="center">
+
+        <button
+            id="checkButton"
+            class="primary"
+            onclick="checkAnswer()"
+        >
+            CHECK
+        </button>
+
+    </div>
+
+    <div id="feedback" class="feedback hidden"></div>
+
+    <div class="center">
+
+        <button
+            id="nextButton"
+            class="primary hidden"
+            onclick="nextQuestion()"
+        >
+            NEXT
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div id="resultPage" class="card hidden center">
+
+    <div class="brand">👤 Abubakr Rabbimov</div>
+
+    <h1>🎉 Test Completed!</h1>
+
+    <div id="score" class="score"></div>
+
+    <p id="resultDetails"></p>
+
+    <button class="primary" onclick="newTest()">
+        NEW TEST
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   PASSWORD
+========================= */
+
+const PASSWORD = "Abubakr";
+
+
+/* =========================
+   VOCABULARY
+========================= */
+
+const lessons = {
+
+11:[
+["Positivity","ijobiylik"],
+["Research","tadqiqot"],
+["Health","sog‘liq"],
+["Relationships","munosabatlar"],
+["Communication","muloqot"],
+["Motivation","rag‘bat"],
+["Attitude","munosabat"],
+["Optimism","optimistik ruh"],
+["Performance","faoliyat"],
+["Judgment","hukm, qaror"],
+["buy sth from","...dan sotib olmoq"],
+["choose between","... orasidan tanlamoq"],
+["compare sth to/with","...ni ... bilan solishtirmoq"],
+["decide on","... haqida qaror qilmoq"],
+["lend sth to","...ga qarzga bermoq"],
+["Package","posilka"],
+["Overseas","chet elga"],
+["Scale","tarozi"],
+["Express delivery","tezkor yetkazib berish"],
+["Tracking","kuzatuv"],
+["Gift","sovg‘a"],
+["Customs declaration form","bojxona deklaratsiyasi"],
+["Filled out","to‘ldirilgan"],
+["All set","hammasi tayyor"],
+["Pay by card","karta orqali to‘lamoq"]
+],
+
+12:[
+["Transform","o‘zgartirmoq"],
+["Modernize","zamonaviylashtirmoq"],
+["Personalize","shaxsiylashtirmoq"],
+["Optimize","eng yaxshi holatga keltirmoq"],
+["Digitalize","raqamlashtirmoq"],
+["Specialize","ixtisoslashmoq"],
+["Organize","tashkil qilmoq"],
+["Realize","anglab yetmoq, amalga oshirmoq"],
+["Misuse","noto‘g‘ri ishlatmoq"],
+["Biased","g‘ayriobyektiv"],
+["pay for","... uchun to‘lamoq"],
+["spend sth on","...ni ...ga sarflamoq"],
+["an advertisement for","... uchun reklama"],
+["different from/to","...dan farqli"],
+["full of","...ga to‘la"],
+["International","xalqaro"],
+["Shipping","yetkazib berish"],
+["Parcel","posilka"],
+["Documents","hujjatlar"],
+["Abroad","chet elga"],
+["Occasionally","ba’zida"],
+["Delay","kechikish"],
+["Nephew","jiyan"],
+["Present","sovg‘a"],
+["Avoid","oldini olmoq"]
+],
+
+13:[
+["Technical","texnik"],
+["Interpersonal","shaxslararo"],
+["Measurable","o‘lchab bo‘ladigan"],
+["Relational","munosabatli"],
+["Dependable","ishonchli"],
+["Knowledgeable","bilimli"],
+["Adaptable","moslashuvchan"],
+["Motivated","rag‘batlantirilgan"],
+["Responsible","mas’uliyatli"],
+["Creative","ijodiy"],
+["begin sth with","... bilan boshlamoq"],
+["connect sth to/with","...ni ...ga ulamoq"],
+["disconnect sth from","...ni ...dan uzmoq"],
+["fill sth with","...ni ... bilan to‘ldirmoq"],
+["result in","...ga olib kelmoq"],
+["Shortness of breath","nafas qisishi"],
+["Experienced","boshdan kechirmoq"],
+["Run tests","tahlillar o‘tkazmoq"],
+["Blood work","qon tahlili"],
+["Rule out","inkor etmoq, aniqlab tashlamoq"],
+["Appreciate","qadrlamoq"]
+],
+
+14:[
+["Critically","tanqidiy tarzda"],
+["Thoroughly","batafsil, to‘liq"],
+["Carefully","ehtiyotkorlik bilan"],
+["Realistically","real tarzda"],
+["Responsibly","mas’uliyat bilan"],
+["Highly","juda yuqori darajada"],
+["Actively","faol tarzda"],
+["Confidently","ishonch bilan"],
+["Consistently","doimiy tarzda"],
+["Intelligently","aqlli tarzda"],
+["comment on","... haqida fikr bildirmoq"],
+["communicate with","... bilan muloqot qilmoq"],
+["glance at","...ga ko‘z yugurtirmoq"],
+["receive sth from","...dan qabul qilmoq"],
+["reply to","...ga javob bermoq"],
+["Surgery","operatsiya"],
+["Recovery","tiklanish"],
+["Monitored","nazorat qilinmoqda"],
+["Visitor","tashrif buyuruvchi"],
+["Complication","asorat"],
+["Discharged","chiqarilgan"],
+["Operation","jarrohlik amaliyoti"],
+["Observe","kuzatmoq"],
+["Update","yangilanish, ma’lumot"],
+["In good hands","ishonchli qo‘llarda"]
+],
+
+15:[
+["Damage","zarar"],
+["Production","ishlab chiqarish"],
+["Contribution","hissa"],
+["Program","dastur"],
+["Development","rivojlanish"],
+["Emissions","chiqarilgan gazlar"],
+["Responsibility","mas’uliyat"],
+["Future","kelajak"],
+["Aware","xabardor"],
+["Destruction","yo‘q qilish"],
+["send sth to sb","...ni kimgadir yubormoq"],
+["talk about","... haqida gaplashmoq"],
+["tell sb about","kimgadir ... haqida aytmoq"],
+["translate from sth into","...dan ...ga tarjima qilmoq"],
+["write to sb about","kimgadir ... haqida yozmoq"],
+["Cough","yo‘tal"],
+["Sore throat","tomoq og‘rig‘i"],
+["Symptoms","alomatlar"],
+["Fever","isitma"],
+["Body aches","tana og‘rig‘i"],
+["Syrup","sirop"],
+["Relieve","yengillashtirmoq"],
+["Soothes","tinchlantiradi"],
+["Hydrated","suvsizlanmagan / suyuqlik ichgan"],
+["Dose","doza"]
+],
+
+16:[
+["Prevention","oldini olish"],
+["Treatment","davolash"],
+["Professional","mutaxassis"],
+["Motivation","motivatsiya"],
+["Encouragement","rag‘batlantirish"],
+["Responsibility","mas’uliyat"],
+["Obesity","semizlik"],
+["Nutrition","ovqatlanish"],
+["Stress","stress"],
+["Risk","xavf"],
+["send sth to sb","...ni kimgadir yubormoq"],
+["talk about","... haqida gaplashmoq"],
+["tell sb about","kimgadir ... haqida aytmoq"],
+["translate from sth into","...dan ...ga tarjima qilmoq"],
+["write to sb about","kimgadir ... haqida yozmoq"],
+["Headache","bosh og‘rig‘i"],
+["Ibuprofen","ibuprofen"],
+["Effective","samarali"],
+["Paracetamol","paratsetamol"],
+["Dosage","doza"],
+["Pharmacist","dorixona xodimi"],
+["Reliable","ishonchli"],
+["Well-stocked","to‘liq ta’minlangan"],
+["Treat","davolamoq"],
+["Meeting","uchrashuv / yig‘ilish"]
+],
+
+17:[
+["Influence","ta’sir"],
+["Broadcast","efirga uzatmoq"],
+["Promote","rivojlantirmoq"],
+["Glorify","ulug‘lamoq"],
+["Expose","oshkor qilmoq"],
+["Awareness","xabardorlik"],
+["Trend","yangi yo‘nalish"],
+["Literacy","savodxonlik"],
+["Standard","me’yor"],
+["Campaign","aksiya"],
+["information about","... haqida ma’lumot"],
+["a letter from sb about","kimdandir ... haqida xat"],
+["angry with sb about","... sababli kimdandir jahli chiqmoq"],
+["guilty of","...da aybdor"],
+["accuse sb of","kimnidir ...da ayblamoq"],
+["Scenic","manzarali"],
+["Shortcut","qisqa yo‘l"],
+["Approximately","taxminan"],
+["Traffic","transport harakati"],
+["Hurry","shoshilish"],
+["Route","yo‘nalish"],
+["Passenger","yo‘lovchi"],
+["Credit card","kredit karta"],
+["Mobile app","mobil ilova"],
+["Traffic lights","svetofor"]
+],
+
+18:[
+["Delinquency","jinoyatchilik"],
+["Vandalism","buzg‘unchilik"],
+["Punishment","jazolash"],
+["Rehabilitation","qayta tiklash"],
+["Offender","jinoyatchi"],
+["Counseling","maslahat berish"],
+["Awareness","xabardorlik"],
+["Guidance","yo‘naltirish"],
+["Peer pressure","yoshlarga bosim"],
+["Re-offend","qayta jinoyat qilmoq"],
+["blame sb for","kimnidir ...da ayblamoq"],
+["blame sth on","biror narsani ...ga sabab qilib ko‘rsatmoq"],
+["criticise sb for","kimnidir ... uchun tanqid qilmoq"],
+["forget about","...ni unutmoq"],
+["forgive sb for","kimnidir ... uchun kechirmoq"],
+["Heading","yo‘l olayotgan"],
+["Share","bo‘lishmoq"],
+["Flight","reys"],
+["Delay","kechikish"],
+["Manageable","boshqariladigan"],
+["Fingers crossed","omad tilayman"],
+["Seminar","seminar"],
+["Visiting","mehmon bo‘lish"],
+["Great trip","ajoyib safar"],
+["Hopefully","umid qilamiz"]
+],
+
+19:[
+["Global","global"],
+["Unity","birlik"],
+["Diversity","rang-baranglik"],
+["Tradition","an’ana"],
+["Threat","tahdid"],
+["Identity","shaxsiyat"],
+["Cooperation","hamkorlik"],
+["Replace","almashtirmoq"],
+["Introduce","tanishtirmoq"],
+["Provide","ta’minlamoq"],
+["invite sb to","kimnidir ...ga taklif qilmoq"],
+["punish sb for","kimnidir ... uchun jazolamoq"],
+["share sth with","biror narsani ... bilan bo‘lishmoq"],
+["smile at","...ga jilmaymoq"],
+["careful with","... bilan ehtiyot bo‘lmoq"],
+["Seat","o‘rindiq"],
+["Headed","yo‘l olayotgan"],
+["City center","shahar markazi"],
+["Stops","bekatlar"],
+["Familiar","tanish"],
+["Route","yo‘nalish"],
+["Miss","o‘tkazib yubormoq"],
+["Attention","e’tibor"],
+["Library","kutubxona"],
+["Visit","tashrif"]
+],
+
+20:[
+["Cosmos","koinot"],
+["Endeavor","harakat, urinish"],
+["Revolutionized","inqilob qildi"],
+["Feasible","amalga oshiriladigan, mumkin"],
+["Autonomous","avtonom, mustaqil"],
+["Drastically","keskin, tubdan"],
+["Undoubtedly","shubhasiz, albatta"],
+["Extraterrestrial","yerdan tashqari"],
+["Compels","majbur qiladi"],
+["Preserving","saqlash, asrash"],
+["difficult for","... uchun qiyin"],
+["fed up with","...dan zerikkan / bezgan"],
+["ready for","...ga tayyor"],
+["responsible for","... uchun mas’ul"],
+["apply for","...ga ariza bermoq"],
+["Get off","tushmoq"],
+["Journey","safar"],
+["Traffic conditions","yo‘l harakati holati"],
+["Contactless payment","kontaktsiz to‘lov"],
+["Tap","karta bosish orqali to‘lash"],
+["Mobile app","mobil ilova"],
+["Heads-up","ogohlantirish"],
+["Arrive","yetib kelmoq"],
+["Appreciate","minnatdor bo‘lmoq"],
+["Station","stansiya"]
+]
+
+};
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let selectedLessons=[];
+let questions=[];
+let currentQuestion=0;
+let score=0;
+let answered=false;
+
+
+/* =========================
+   LOGIN
+========================= */
+
+function login(){
+
+    const value=
+        document.getElementById("passwordInput").value;
+
+    if(value===PASSWORD){
+
+        document.getElementById("loginPage")
+            .classList.add("hidden");
+
+        document.getElementById("lessonPage")
+            .classList.remove("hidden");
+
+    }else{
+
+        document.getElementById("passwordError")
+            .textContent="❌ Password incorrect.";
+    }
+}
+
+
+/* =========================
+   LESSONS
+========================= */
+
+function toggleLesson(number){
+
+    const el=
+        document.getElementById("lesson"+number);
+
+    if(selectedLessons.includes(number)){
+
+        selectedLessons=
+            selectedLessons.filter(x=>x!==number);
+
+        el.classList.remove("selected");
+
+    }else{
+
+        selectedLessons.push(number);
+
+        el.classList.add("selected");
+    }
+
+    updateSelectedInfo();
+}
+
+
+function updateSelectedInfo(){
+
+    const info=
+        document.getElementById("selectedInfo");
+
+    if(selectedLessons.length===0){
+
+        info.textContent=
+            "Hech qanday lesson tanlanmagan.";
+
+    }else{
+
+        info.textContent=
+            "Tanlangan: Lesson "+
+            selectedLessons.sort((a,b)=>a-b).join(", ");
+    }
+}
+
+
+/* =========================
+   SHUFFLE
+========================= */
+
+function shuffle(arr){
+
+    const a=[...arr];
+
+    for(let i=a.length-1;i>0;i--){
+
+        const j=
+            Math.floor(Math.random()*(i+1));
+
+        [a[i],a[j]]=[a[j],a[i]];
+    }
+
+    return a;
+}
+
+
+/* =========================
+   BEGIN TEST
+========================= */
+
+function beginTest(){
+
+    if(selectedLessons.length===0){
+
+        alert("Avval lesson tanlang.");
+
+        return;
+    }
+
+    let pool=[];
+
+    selectedLessons.forEach(n=>{
+
+        lessons[n].forEach(item=>{
+
+            pool.push({
+                word:item[0],
+                meaning:item[1],
+                lesson:n
+            });
+
+        });
+
+    });
+
+    questions=shuffle(pool).slice(0,15);
+
+    currentQuestion=0;
+    score=0;
+
+    document.getElementById("lessonPage")
+        .classList.add("hidden");
+
+    document.getElementById("testPage")
+        .classList.remove("hidden");
+
+    showQuestion();
+}
+
+
+/* =========================
+   SHOW QUESTION
+========================= */
+
+function showQuestion(){
+
+    answered=false;
+
+    const q=questions[currentQuestion];
+
+    document.getElementById("progress")
+        .textContent=
+        "Question "+
+        (currentQuestion+1)+
+        " / "+
+        questions.length;
+
+    document.getElementById("word")
+        .textContent=q.word;
+
+    document.getElementById("translationInput").value="";
+    document.getElementById("sentenceInput").value="";
+
+    document.getElementById("feedback")
+        .classList.add("hidden");
+
+    document.getElementById("nextButton")
+        .classList.add("hidden");
+
+    document.getElementById("checkButton")
+        .disabled=false;
+}
+
+
+/* =========================
+   TRANSLATION NORMALIZATION
+========================= */
+
+function normalize(text){
+
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/[.,!?;:]/g,"")
+        .replace(/\s+/g," ");
+}
+
+
+/* =========================
+   CHECK ANSWER
+========================= */
+
+async function checkAnswer(){
+
+    if(answered)return;
+
+    const q=questions[currentQuestion];
+
+    const translation=
+        document
+        .getElementById("translationInput")
+        .value
+        .trim();
+
+    const sentence=
+        document
+        .getElementById("sentenceInput")
+        .value
+        .trim();
+
+
+    if(!translation){
+
+        alert("Tarjimani yozing.");
+
+        return;
+    }
+
+    if(!sentence){
+
+        alert("Inglizcha gap yozing.");
+
+        return;
+    }
+
+
+    answered=true;
+
+    document.getElementById("checkButton")
+        .disabled=true;
+
+
+    /* TRANSLATION CHECK */
+
+    const userTranslation=
+        normalize(translation);
+
+    const correctTranslation=
+        normalize(q.meaning);
+
+    let translationCorrect=
+        userTranslation===correctTranslation;
+
+
+    /* SCORE */
+
+    if(translationCorrect){
+
+        score++;
+    }
+
+
+    /* LANGUAGE TOOL */
+
+    let languageResult;
+
+    try{
+
+        languageResult=
+            await checkWithLanguageTool(sentence);
+
+    }catch(error){
+
+        languageResult={
+            success:false,
+            message:
+            "LanguageTool bilan bog‘lanib bo‘lmadi."
+        };
+    }
+
+
+    showFeedback(
+        q,
+        translationCorrect,
+        translation,
+        sentence,
+        languageResult
+    );
+}
+
+
+/* =========================
+   LANGUAGE TOOL
+========================= */
+
+async function checkWithLanguageTool(text){
+
+    const body=
+        new URLSearchParams();
+
+    body.append("text",text);
+    body.append("language","en-US");
+
+    const response=
+        await fetch(
+            "https://api.languagetool.org/v2/check",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":
+                    "application/x-www-form-urlencoded"
+                },
+                body:body.toString()
+            }
+        );
+
+
+    if(!response.ok){
+
+        throw new Error("LanguageTool error");
+    }
+
+
+    const data=
+        await response.json();
+
+    return {
+        success:true,
+        matches:data.matches||[]
+    };
+}
+
+
+/* =========================
+   FEEDBACK
+========================= */
+
+function showFeedback(
+    q,
+    translationCorrect,
+    translation,
+    sentence,
+    lt
+){
+
+    const box=
+        document.getElementById("feedback");
+
+    box.className="feedback";
+
+    let html="";
+
+
+    /* TRANSLATION */
+
+    html+=
+        "<h3>📖 Translation</h3>";
+
+
+    if(translationCorrect){
+
+        html+=
+        "<p>✅ Correct</p>";
+
+    }else{
+
+        html+=
+        "<p>❌ Not correct</p>";
+
+        html+=
+        "<p><b>Your answer:</b> "+
+        escapeHtml(translation)+
+        "</p>";
+
+        html+=
+        "<p><b>Correct:</b> "+
+        escapeHtml(q.meaning)+
+        "</p>";
+    }
+
+
+    /* SENTENCE */
+
+    html+=
+        "<hr><h3>✍️ Your sentence</h3>";
+
+    html+=
+        "<p>"+escapeHtml(sentence)+"</p>";
+
+
+    /* LANGUAGE TOOL */
+
+    html+=
+        "<h3>🔎 LanguageTool feedback</h3>";
+
+
+    if(!lt.success){
+
+        html+=
+        "<p class='warning'>⚠️ "+
+        lt.message+
+        "</p>";
+
+    }else if(lt.matches.length===0){
+
+        html+=
+        "<p>✅ No grammar or spelling mistakes found.</p>";
+
+    }else{
+
+        html+=
+        "<p>❌ "+
+        lt.matches.length+
+        " issue(s) found:</p>";
+
+        lt.matches.forEach((match,index)=>{
+
+            html+=
+            "<div class='warning' style='margin:10px 0;padding:12px'>";
+
+            html+=
+            "<b>"+(index+1)+". "+
+            escapeHtml(
+                match.shortMessage ||
+                match.message
+            )+
+            "</b>";
+
+            html+=
+            "<br>"+escapeHtml(match.message);
+
+
+            if(
+                match.replacements &&
+                match.replacements.length
+            ){
+
+                const suggestions=
+                    match.replacements
+                    .slice(0,3)
+                    .map(x=>x.value)
+                    .join(", ");
+
+                html+=
+                "<br><b>Suggestion:</b> "+
+                escapeHtml(suggestions);
+            }
+
+            html+="</div>";
+        });
+    }
+
+
+    box.innerHTML=html;
+
+    box.classList.remove("hidden");
+
+    document.getElementById("nextButton")
+        .classList.remove("hidden");
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+function nextQuestion(){
+
+    if(
+        currentQuestion<
+        questions.length-1
+    ){
+
+        currentQuestion++;
+
+        showQuestion();
+
+    }else{
+
+        finishTest();
+    }
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+function finishTest(){
+
+    document.getElementById("testPage")
+        .classList.add("hidden");
+
+    document.getElementById("resultPage")
+        .classList.remove("hidden");
+
+    const percentage=
+        Math.round(
+            score/questions.length*100
+        );
+
+    document.getElementById("score")
+        .textContent=
+        score+
+        " / "+
+        questions.length;
+
+    document.getElementById("resultDetails")
+        .textContent=
+        "Translation score: "+
+        percentage+
+        "%";
+}
+
+
+/* =========================
+   NEW TEST
+========================= */
+
+function newTest(){
+
+    selectedLessons=[];
+    questions=[];
+    currentQuestion=0;
+    score=0;
+
+    for(let i=11;i<=20;i++){
+
+        document
+        .getElementById("lesson"+i)
+        .classList.remove("selected");
+    }
+
+    updateSelectedInfo();
+
+    document.getElementById("resultPage")
+        .classList.add("hidden");
+
+    document.getElementById("lessonPage")
+        .classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
+```
